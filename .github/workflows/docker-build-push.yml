@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           
       - name: Build Docker image
-        run: docker build -t hastings2002/httpd .
+        run: docker build -t hastings2002/project_4 .
         
       - name: Push Docker image to DockerHub
-        run: docker push hastings2002/httpd
+        run: docker push hastings2002/project_4
