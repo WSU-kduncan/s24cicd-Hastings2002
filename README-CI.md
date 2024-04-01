@@ -18,3 +18,11 @@
 * command to build the image from the docker file is `docker build -t my-apache-server .`
 * command to run the container is `docker run -d -p 8080:80 my-apache-server`
 * find the website by putting `http://localhost:8080` in a URL search
+
+### create public repo in ducker hub
+* Open up docker hub in a web browser
+* Log in
+* click repositorys at the top
+* click blue create repository
+* make sure visibility is Public
+
