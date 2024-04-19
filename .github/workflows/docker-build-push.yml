@@ -33,7 +33,7 @@ jobs:
         run: |
           docker push hastings2002/project_4
           TAG="${{ steps.extract_tag.outputs.tags }}"
-          if ! docker tag hastings2002/project_4 hastings2002/project_4:$TAG; then
+          if ! docker tag hastings2002/project_4:${{ steps.extract_tag.outputs.tags }} hastings2002/project_4:$TAG; then
             echo "Error: Docker tag failed"
             exit 1
           fi
@@ -42,19 +42,19 @@ jobs:
             exit 1
           fi
           if [[ "$TAG" == *.*.* ]]; then
-            docker tag hastings2002/project_4 hastings2002/project_4:latest
+            docker tag hastings2002/project_4:${{ steps.extract_tag.outputs.tags }} hastings2002/project_4:latest
             if ! docker push hastings2002/project_4:latest; then
               echo "Error: Docker push failed for latest tag"
               exit 1
             fi
             MAJOR=$(echo $TAG | cut -d. -f1)
-            docker tag hastings2002/project_4 hastings2002/project_4:$MAJOR
+            docker tag hastings2002/project_4:${{ steps.extract_tag.outputs.tags }} hastings2002/project_4:$MAJOR
             if ! docker push hastings2002/project_4:$MAJOR; then
               echo "Error: Docker push failed for major tag"
               exit 1
             fi
             MAJOR_MINOR=$(echo $TAG | cut -d. -f1-2)
-            docker tag hastings2002/project_4 hastings2002/project_4:$MAJOR_MINOR
+            docker tag hastings2002/project_4:${{ steps.extract_tag.outputs.tags }} hastings2002/project_4:$MAJOR_MINOR
             if ! docker push hastings2002/project_4:$MAJOR_MINOR; then
               echo "Error: Docker push failed for major.minor tag"
               exit 1
