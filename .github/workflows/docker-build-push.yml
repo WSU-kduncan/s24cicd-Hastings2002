@@ -17,6 +17,8 @@ jobs:
       - name: Generate Docker tags
         id: docker_tags
         uses: docker/metadata-action@v3
+        with:
+          images: hastings2002/project_4
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
