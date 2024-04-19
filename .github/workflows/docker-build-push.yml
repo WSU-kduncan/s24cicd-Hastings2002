@@ -37,14 +37,26 @@ jobs:
             echo "Error: Docker tag failed"
             exit 1
           fi
-          docker push hastings2002/project_4:$TAG
+          if ! docker push hastings2002/project_4:$TAG; then
+            echo "Error: Docker push failed for tagged image"
+            exit 1
+          fi
           if [[ "$TAG" == *.*.* ]]; then
             docker tag hastings2002/project_4 hastings2002/project_4:latest
-            docker push hastings2002/project_4:latest
+            if ! docker push hastings2002/project_4:latest; then
+              echo "Error: Docker push failed for latest tag"
+              exit 1
+            fi
             MAJOR=$(echo $TAG | cut -d. -f1)
             docker tag hastings2002/project_4 hastings2002/project_4:$MAJOR
-            docker push hastings2002/project_4:$MAJOR
+            if ! docker push hastings2002/project_4:$MAJOR; then
+              echo "Error: Docker push failed for major tag"
+              exit 1
+            fi
             MAJOR_MINOR=$(echo $TAG | cut -d. -f1-2)
             docker tag hastings2002/project_4 hastings2002/project_4:$MAJOR_MINOR
-            docker push hastings2002/project_4:$MAJOR_MINOR
+            if ! docker push hastings2002/project_4:$MAJOR_MINOR; then
+              echo "Error: Docker push failed for major.minor tag"
+              exit 1
+            fi
           fi
