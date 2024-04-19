@@ -26,6 +26,8 @@ jobs:
       - name: Extract tag information
         id: extract_tag
         uses: docker/metadata-action@v3
+        with:
+          images: hastings2002/project_4
 
       - name: Push Docker image to DockerHub
         run: |
