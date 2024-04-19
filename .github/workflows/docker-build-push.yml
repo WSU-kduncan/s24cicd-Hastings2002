@@ -14,6 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Generate Docker tags
+        id: docker_tags
+        uses: docker/metadata-action@v3
+
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -23,49 +27,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t hastings2002/project_4 .
 
-      - name: Extract tag information
-        id: extract_tag
-        uses: docker/metadata-action@v3
-        with:
-          images: hastings2002/project_4
-
       - name: Push Docker image to DockerHub
         run: |
-          docker push hastings2002/project_4
-          TAG=$(echo "${{ steps.extract_tag.outputs.tags }}" | cut -d ' ' -f 1)
-          if ! docker tag hastings2002/project_4:$TAG hastings2002/project_4:$TAG; then
-            echo "Error: Docker tag failed"
-            exit 1
-          fi
-          if ! docker push hastings2002/project_4:$TAG; then
-            echo "Error: Docker push failed for tagged image"
-            exit 1
-          fi
-          if [[ "$TAG" == *.*.* ]]; then
-            if ! docker tag hastings2002/project_4:$TAG hastings2002/project_4:latest; then
-              echo "Error: Docker tag failed for latest"
-              exit 1
-            fi
-            if ! docker push hastings2002/project_4:latest; then
-              echo "Error: Docker push failed for latest tag"
-              exit 1
-            fi
-            MAJOR=$(echo $TAG | cut -d. -f1)
-            if ! docker tag hastings2002/project_4:$TAG hastings2002/project_4:$MAJOR; then
-              echo "Error: Docker tag failed for major"
-              exit 1
-            fi
-            if ! docker push hastings2002/project_4:$MAJOR; then
-              echo "Error: Docker push failed for major tag"
-              exit 1
-            fi
-            MAJOR_MINOR=$(echo $TAG | cut -d. -f1-2)
-            if ! docker tag hastings2002/project_4:$TAG hastings2002/project_4:$MAJOR_MINOR; then
-              echo "Error: Docker tag failed for major.minor"
-              exit 1
-            fi
-            if ! docker push hastings2002/project_4:$MAJOR_MINOR; then
-              echo "Error: Docker push failed for major.minor tag"
-              exit 1
-            fi
-          fi
+          docker push hastings2002/project_4:${{ steps.docker_tags.outputs.tags }}
+          docker push hastings2002/project_4:latest
