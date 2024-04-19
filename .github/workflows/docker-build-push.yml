@@ -30,13 +30,16 @@ jobs:
       - name: Push Docker image to DockerHub
         run: |
           docker push hastings2002/project_4
-          docker tag hastings2002/project_4 hastings2002/project_4:${{ steps.extract_tag.outputs.tag }}
-          docker push hastings2002/project_4:${{ steps.extract_tag.outputs.tag }}
-          if [[ "${{ steps.extract_tag.outputs.tag }}" == *.*.* ]]; then
+          TAG="${{ steps.extract_tag.outputs.tags }}"
+          docker tag hastings2002/project_4 hastings2002/project_4:$TAG
+          docker push hastings2002/project_4:$TAG
+          if [[ "$TAG" == *.*.* ]]; then
             docker tag hastings2002/project_4 hastings2002/project_4:latest
             docker push hastings2002/project_4:latest
-            docker tag hastings2002/project_4 hastings2002/project_4:${{ steps.extract_tag.outputs.major }}
-            docker push hastings2002/project_4:${{ steps.extract_tag.outputs.major }}
-            docker tag hastings2002/project_4 hastings2002/project_4:${{ steps.extract_tag.outputs.major_minor }}
-            docker push hastings2002/project_4:${{ steps.extract_tag.outputs.major_minor }}
+            MAJOR=$(echo $TAG | cut -d. -f1)
+            docker tag hastings2002/project_4 hastings2002/project_4:$MAJOR
+            docker push hastings2002/project_4:$MAJOR
+            MAJOR_MINOR=$(echo $TAG | cut -d. -f1-2)
+            docker tag hastings2002/project_4 hastings2002/project_4:$MAJOR_MINOR
+            docker push hastings2002/project_4:$MAJOR_MINOR
           fi
