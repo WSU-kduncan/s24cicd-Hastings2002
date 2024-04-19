@@ -32,7 +32,7 @@ jobs:
       - name: Push Docker image to DockerHub
         run: |
           docker push hastings2002/project_4
-          TAG="${{ steps.extract_tag.outputs.tags }}"
+          TAG=$(echo "${{ steps.extract_tag.outputs.tags }}" | cut -d ' ' -f 1)
           if ! docker tag hastings2002/project_4:$TAG hastings2002/project_4:$TAG; then
             echo "Error: Docker tag failed"
             exit 1
