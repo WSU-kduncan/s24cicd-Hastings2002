@@ -14,12 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Generate Docker tags
-        id: docker_tags
-        uses: docker/metadata-action@v3
-        with:
-          images: hastings2002/project_4
-
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -29,7 +23,12 @@ jobs:
       - name: Build Docker image
         run: docker build -t hastings2002/project_4 .
 
+      - name: Determine Git tag
+        id: git_tag
+        run: echo "::set-output name=tag::$(git describe --tags)"
+
       - name: Push Docker image to DockerHub
         run: |
-          docker push hastings2002/project_4:${{ steps.docker_tags.outputs.tags }}
+          docker tag hastings2002/project_4:latest hastings2002/project_4:${{ steps.git_tag.outputs.tag }}
+          docker push hastings2002/project_4:${{ steps.git_tag.outputs.tag }}
           docker push hastings2002/project_4:latest
