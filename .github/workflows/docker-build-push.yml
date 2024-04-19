@@ -33,7 +33,10 @@ jobs:
         run: |
           docker push hastings2002/project_4
           TAG="${{ steps.extract_tag.outputs.tags }}"
-          docker tag hastings2002/project_4 hastings2002/project_4:$TAG
+          if ! docker tag hastings2002/project_4 hastings2002/project_4:$TAG; then
+            echo "Error: Docker tag failed"
+            exit 1
+          fi
           docker push hastings2002/project_4:$TAG
           if [[ "$TAG" == *.*.* ]]; then
             docker tag hastings2002/project_4 hastings2002/project_4:latest
