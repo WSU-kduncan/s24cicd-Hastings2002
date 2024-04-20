@@ -88,3 +88,9 @@ docker rm <container_name>
 # Run a new container with the updated image
 docker run -d -p <host_port>:<container_port> --name <container_name> <your_image_name>'
 ```
+
+### How to install adnanh's webhook
+```
+sudo apt-get install webhook
+```
+
